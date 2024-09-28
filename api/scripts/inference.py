@@ -81,6 +81,14 @@ class AiHelper:
             return model_respoce
         else:
             return "К сожалению, я не могу немедленно ответить на ваш вопрос. Уточняю детали для точного ответа на ваш запрос. \nМы свяжемся с вами как можно скорее с подробным ответом. Извините за ожидание!"
+    
 
     def __call__(self, query:str):
         return self.get_answer(query)
+
+    def inference_classification(self, query:str):
+        lvl1 = classif_lvl1(query)[0]['label']
+    
+        lvl2 = classif_lvl2(query)[0]['label']
+    
+        return {"class_1": lvl1, "class_2": lvl2}

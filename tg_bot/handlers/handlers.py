@@ -2,22 +2,19 @@ import aiohttp
 from telegram import Update
 from telegram.ext import ContextTypes
 
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     greeting = "Добрый день! Это интеллектуальный помощник RUTUBE от команды Уральские мандарины. Какой у вас вопрос?"
     await update.message.reply_text(greeting)
 
 
+# Функция для обработки сообщений и отправки запроса на ваш API /predict
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_message = update.message.text
 
-    # Адрес вашего vLLM-сервера
-    url = "http://176.123.167.65:8000/v1/chat/completions"
+    url = "http://176.123.167.65:8001/predict"
 
-    # Запрос на инференс модели
     payload = {
-        "model": "Vikhrmodels/Vikhr-Nemo-12B-Instruct-R-21-09-24",
-        "messages": [{"role": "user", "content": user_message}]
+        "question": user_message
     }
 
     try:
@@ -25,7 +22,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             async with session.post(url, json=payload) as resp:
                 if resp.status == 200:
                     response_data = await resp.json()
-                    assistant_reply = response_data['choices'][0]['message']['content']
+                    assistant_reply = response_data['answer']
                     await update.message.reply_text(assistant_reply)
                 else:
                     error_message = f"Ошибка при запросе: {await resp.text()}"

@@ -32,8 +32,7 @@ llm = VLLMOpenAI(
     model_name="Vikhrmodels/Vikhr-Nemo-12B-Instruct-R-21-09-24",
     openai_api_key="EMPTY",
     temperature=0,
-    openai_api_base="http://176.123.167.65:8000/v1/",
-    model_kwargs={"stop": ["."]}
+    openai_api_base="http://176.123.167.65:8000/v1/"
 )
 
 re_query_prompt = PromptTemplate.from_template("""Вы - ассистент с искусственным интеллектом, которому поручено переформулировать запросы пользователей для улучшения поиска в системе RAG.  

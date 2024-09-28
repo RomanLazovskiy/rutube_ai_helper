@@ -2,9 +2,10 @@ import asyncio
 from fastapi import FastAPI
 from scripts.api_models import Request, Response
 from scripts.inference import AiHelper
+from scripts.model_config import llm, ensemble_retriever, cross_encoder
 import uvicorn
 
-ai_helper = AiHelper()
+ai_helper = AiHelper(llm=llm, retriever=ensemble_retriever, cross_encoder=cross_encoder)
 
 app = FastAPI()
 
@@ -16,8 +17,15 @@ def index():
 
 @app.post("/predict", response_model=Response)
 async def predict(request: Request):
-    response = ai_helper(request.question)
-    return response
+    result = ai_helper(request.question)
+    classification_result = ai_helper.inference_classification(request.question)
+
+    return Response(
+        answer=result,
+        class_1=classification_result['class_1'],
+        class_2=classification_result['class_2']
+    )
+
 
 
 if __name__ == "__main__":
