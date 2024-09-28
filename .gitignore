@@ -82,9 +82,6 @@ coverage.xml
 api/data/knowledge_base.xlsx
 api/models/*
 
-# Исключение для Docker-монтирования
-!api/models/.keep  # Оставить файл, чтобы директория не была пустой
-!api/data/.keep
 
 # Секреты и ключи
 *.pem
