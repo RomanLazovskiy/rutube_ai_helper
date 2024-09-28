@@ -33,7 +33,7 @@ download-data:
 # Запуск всех сервисов с помощью docker-compose
 start-all-project:
 	@echo "Скачивание данных..."
-	@$(MAKE) download-data
+	# @$(MAKE) download-data
 	@echo "Запуск всех сервисов с помощью docker-compose..."
 	docker-compose up -d --build
 
