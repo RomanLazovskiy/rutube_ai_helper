@@ -13,19 +13,22 @@ VLLM_CONTAINER_NAME = vllm-container
 VLLM_MODEL_NAME = Vikhrmodels/Vikhr-Nemo-12B-Instruct-R-21-09-24
 VLLM_PORT = 8000
 
-# Скачивание файлов с Google Диска в директорию api/models
+# Скачивание файлов с Google Диска в директорию api/models и api/data
 download-data:
 	@echo "Создание директорий ./api/data и ./api/models..."
 	@mkdir -p ./api/data
-	@mkdir -p ./api/models/cross_encoder
+	@mkdir -p ./api/models
 	@echo "Скачивание knowledge_base.xlsx в ./api/data..."
 	@gdown --id 1sg-EuUzGYe7Sa2nkVEMmE2fXRU2Aqu4l -O ./api/data/knowledge_base.xlsx
-	@echo "Скачивание cross_encoder.zip в ./api/models..."
-	@gdown --id 1s5GS8jSUsNuz5VsRq72zDDw9cobCfOKi -O ./api/models/cross_encoder.zip
-	@echo "Распаковка cross_encoder.zip в ./api/models/cross_encoder..."
-	@unzip -o ./api/models/cross_encoder.zip -d ./api/models/
-	@echo "Удаление архива cross_encoder.zip..."
-	@rm ./api/models/cross_encoder.zip
+	@echo "Скачивание real_cases.xlsx в ./api/data..."
+	@gdown --id 1gRN5JiM8AnCDdNe-DF2KVf5VPhCuYxgt -O ./api/data/real_cases.xlsx
+	@echo "Скачивание models.zip в ./api/models..."
+	@gdown --id 1ovJ_0kL7DCGOxErFTpB9U7ZRszKFSpJ7 -O ./api/models/models.zip
+	@echo "Распаковка models.zip в ./api/models..."
+	@unzip -o ./api/models/models.zip -d ./api/models/
+	@echo "Удаление архива models.zip..."
+	@rm ./api/models/models.zip
+	@echo "Все файлы успешно загружены и распакованы."
 
 # Запуск всех сервисов с помощью docker-compose
 start-all-project:

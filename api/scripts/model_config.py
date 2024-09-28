@@ -1,4 +1,3 @@
-import pandas as pd
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceBgeEmbeddings
 from langchain.retrievers.multi_query import MultiQueryRetriever
@@ -8,12 +7,15 @@ from langchain.prompts import PromptTemplate
 from langchain_core.documents import Document
 from sentence_transformers.cross_encoder import CrossEncoder
 from langchain_community.llms import VLLMOpenAI
+from transformers import pipeline
+import pandas as pd
 
-# Загрузка данных
-df = pd.read_excel('data/knowledge_base.xlsx')
-q = df['Вопрос из БЗ'].tolist()
-a = df['Ответ из БЗ'].tolist()
-docs = [Document(page_content=x, metadata=dict(answer=ans)) for x, ans in zip(q, a)]
+df_knowledge_base = pd.read_excel('data/knowledge_base.xlsx')[["Вопрос из БЗ", "Ответ из БЗ"]].drop_duplicates()
+df_cases = pd.read_excel('data/real_cases.xlsx')[["Вопрос пользователя", "Ответ из БЗ"]].drop_duplicates()
+
+docs_knowledge = [Document(page_content=x, metadata=dict(answer=ans)) for x, ans in zip(df_knowledge_base['Вопрос из БЗ'], df_knowledge_base['Ответ из БЗ'])]
+docs_cases = [Document(page_content=x, metadata=dict(answer=ans)) for x, ans in zip(df_cases['Вопрос пользователя'], df_cases['Ответ из БЗ'])]
+all_docs = docs_knowledge + docs_cases
 
 embeddings = HuggingFaceBgeEmbeddings(
     model_name='jinaai/jina-embeddings-v3',
@@ -21,10 +23,9 @@ embeddings = HuggingFaceBgeEmbeddings(
     encode_kwargs=dict(task="text-matching"),
     query_instruction=''
 )
-db = FAISS.from_documents(docs, embeddings)
+vector_store = FAISS.from_documents(docs_knowledge, embeddings)
 
-retriever = db.as_retriever(search_kwargs=dict(k=5))
-retriever_bm25 = BM25Retriever.from_documents(docs)
+retriever_bm25 = BM25Retriever.from_documents(all_docs)
 retriever_bm25.k = 5
 
 llm = VLLMOpenAI(
@@ -35,29 +36,23 @@ llm = VLLMOpenAI(
     model_kwargs={"stop": ["."]}
 )
 
-prompt = PromptTemplate.from_template("""
+re_query_prompt = PromptTemplate.from_template("""
 Вы - ассистент с искусственным интеллектом, которому поручено переформулировать запросы пользователей для улучшения поиска в системе RAG.
-Учитывая исходный запрос, перепишите его, чтобы он был более конкретным, подробным и позволял с большей вероятностью извлекать релевантную информацию. 
-Исходный запрос: {question} 
+Учитывая исходный запрос, перепишите его, чтобы он был более конкретным, подробным и позволял с большей вероятностью извлекать релевантную информацию.
+Исходный запрос: {question}
 
-Переписанный запрос:""")
+Переписанный запрос:
+""")
 
 retriever_from_llm = MultiQueryRetriever.from_llm(
-    retriever=db.as_retriever(search_kwargs=dict(k=3)),
+    retriever=vector_store.as_retriever(search_kwargs=dict(k=5)),
     llm=llm,
-    prompt=prompt
+    prompt=re_query_prompt
 )
 
 ensemble_retriever = EnsembleRetriever(retrievers=[retriever_bm25, retriever_from_llm], weights=[0.5, 0.5])
 
-ce = CrossEncoder("./models/cross_encoder", device='cpu')
+cross_encoder = CrossEncoder("./models/cross_encoder", device='cpu')
 
-# Настройка шаблона для llm
-llm_template = '''Ты интеллектуальный помощник оператора службы поддержки видеохостинга RUTUBE. Твоя задача максимально точно и вежливо отвечать на запросы пользователя только о платформе. 
-{examples}
-Вопрос пользователя: {q}
-Ответ:
-'''
-
-llm_template = PromptTemplate.from_template(llm_template)
-chain = llm_template | llm
+classif_lvl1 = pipeline("text-classification", model="./models/flan-t5-v2-lvl1")
+classif_lvl2 = pipeline("text-classification", model="./models/flan-t5-class2-v3")

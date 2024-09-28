@@ -1,8 +1,10 @@
 import asyncio
 from fastapi import FastAPI
 from scripts.api_models import Request, Response
-from scripts.inference import get_answer
+from scripts.inference import AiHelper
 import uvicorn
+
+ai_helper = AiHelper()
 
 app = FastAPI()
 
@@ -14,18 +16,10 @@ def index():
 
 @app.post("/predict", response_model=Response)
 async def predict(request: Request):
-    # Получаем ответ на вопрос
-    answer = get_answer(query=request.question)
-
-    # Возвращаем ответ
-    return Response(
-        answer=answer,
-        class_1="Классификатор 1 уровня",
-        class_2="Классификатор 2 уровня"
-    )
+    response = ai_helper(request.question)
+    return response
 
 
-# Запуск приложения
 if __name__ == "__main__":
     host = "0.0.0.0"
     config = uvicorn.Config(app, host=host, port=8001)

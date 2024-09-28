@@ -77,7 +77,7 @@ coverage.xml
 *.log
 
 # Файлы и директории проекта
-api/data/knowledge_base.xlsx
+api/data/*
 api/models/*
 
 
@@ -89,3 +89,4 @@ secrets/
 *.p12
 
 .ipynb_checkpoints
+.python-version
