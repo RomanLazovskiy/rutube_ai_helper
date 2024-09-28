@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 
-from tg_bot.handlers.handlers import start, handle_message
+from handlers.handlers import start, handle_message
 
 def main():
     load_dotenv()

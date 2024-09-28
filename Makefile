@@ -32,7 +32,7 @@ start-all-project:
 	@echo "Скачивание данных..."
 	@$(MAKE) download-data
 	@echo "Запуск всех сервисов с помощью docker-compose..."
-	docker-compose up --build
+	docker-compose up -d --build
 
 # Остановка всех сервисов
 stop-all-project:
@@ -174,4 +174,4 @@ help:
 	@echo "  run-vllm          - Запуск Docker-контейнера для vLLM"
 	@echo "  stop-vllm         - Остановка Docker-контейнера для vLLM"
 	@echo "  logs-vllm         - Просмотр логов контейнера для vLLM"
-	@echo "  activate-env      - Активация виртуального окружения с помощью Poetry"
+	@echo "  env      - Активация виртуального окружения с помощью Poetry"

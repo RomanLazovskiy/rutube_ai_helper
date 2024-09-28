@@ -44,6 +44,25 @@ git clone https://github.com/yourusername/rutube-ai-helper.git
 cd rutube-ai-helper
 ```
 
+### Запуск целового проекта
+
+#### Необходимо заполнить файл .env по пути `rutube_ai_helper/tg_bot/.env`
+
+```
+TELEGRAM_BOT_TOKEN=<YOUR_BOT_TOKEN>
+```
+
+```bash
+# Активипуем виртуальное окружение для проекта
+make activate-env
+
+# Устанавливаем зависимости с помощью Poetry
+poetry install
+
+# Запускаем проект полностью
+make start-all-project
+```
+
 ### Установка зависимостей для API сервера
 
 API сервер имеет свои зависимости и `pyproject.toml` файл внутри директории `api`. Перейдите в директорию `api` и установите зависимости:
