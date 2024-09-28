@@ -1,15 +1,23 @@
 [tool.poetry]
-name = "rutube-ai-supporter"
+name = "rutube-ai-supporter-api"
 version = "0.1.0"
 description = ""
 authors = ["Роман Лазовский <r.v.lazovskiy@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.10"
+langchain = "^0.3.1"
+langchain-community = "^0.3.1"
+pandas = "^2.2.3"
+sentence-transformers = "^3.1.1"
+fastapi = "^0.115.0"
+uvicorn = "^0.31.0"
+openpyxl = "^3.1.5"
+einops = "^0.8.0"
 gdown = "^5.2.0"
+faiss-gpu-cu12 = "^1.8.0.2"
 rank-bm25 = "^0.2.2"
-openai = "^1.50.2"
 
 
 [build-system]
