@@ -1,0 +1,100 @@
+# Общие настройки .gitignore
+
+# Операционная система
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+*.log
+*.sqlite3
+*.env
+.env.*
+*.venv/
+*.vscode/
+poetry.lock
+Pipfile
+Pipfile.lock
+*.pyo
+*.pyd
+*.swp
+
+# Конфигурации IDE
+.idea/
+*.iml
+.vscode/
+
+# Локальные файлы и настройки среды
+*.local
+*.envrc
+.virtualenv
+*.virtualenvs
+*.test
+*.pytest_cache/
+.tox/
+migrations/
+site/
+
+# Docker
+*.env
+.dockerignore
+Dockerfile
+docker-compose.yml
+docker-compose*.yml
+docker-compose.override.yml
+
+# Logs
+*.log
+*.out
+*.err
+
+# Unit test / coverage reports
+coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Приложения и временные файлы
+*.tmp
+*.temp
+*.pid
+*.seed
+*.bak
+*.orig
+*.rej
+*.sublime-project
+*.sublime-workspace
+
+# Артефакты сборки
+*.map
+*.class
+*.idea
+*.vs
+*.log
+
+# Файлы и директории проекта
+api/data/knowledge_base.xlsx
+api/models/*
+
+# Исключение для Docker-монтирования
+!api/models/.keep  # Оставить файл, чтобы директория не была пустой
+!api/data/.keep
+
+# Секреты и ключи
+*.pem
+*.key
+*.crt
+secrets/
+*.p12
+
+# Исключение для README и основных файлов
+!.gitignore
+!.gitattributes
+README.md
+LICENSE

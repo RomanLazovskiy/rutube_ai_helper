@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    image: rutube-ai-supporter-api
+    container_name: api-container
+    ports:
+      - "8001:8001"
+
+  tg-bot:
+    build:
+      context: ./tg_bot
+      dockerfile: Dockerfile
+    image: rutube-ai-supporter-tg-bot
+    container_name: tg-bot-container
+    env_file:
+      - ./tg_bot/.env
+
+  vllm:
+    image: vllm/vllm-openai:latest
+    container_name: vllm-container
+    runtime: nvidia
+    environment:
+      - HUGGING_FACE_HUB_TOKEN=${HUGGING_FACE_HUB_TOKEN}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    command: >
+      --model Vikhrmodels/Vikhr-Nemo-12B-Instruct-R-21-09-24
+      --gpu-memory-utilization 1.0
+      --max_model_len 9872
+      --enable-chunked-prefill=False
+      --dtype=half
