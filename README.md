@@ -204,5 +204,19 @@ rutube-ai-supporter/
 
 Если у вас есть вопросы или предложения, вы можете связаться с командой разработчиков:
 
-- **Email**: r.v.lazovskiy@gmail.com
+### 🍊 Лазовский Роман Владимирович
+- **Email**: [r.v.lazovskiy@gmail.com](mailto:r.v.lazovskiy@gmail.com)
 - **Telegram**: [@rvlazovskiy](https://t.me/rvlazovskiy)
+
+---
+
+### 🍊 Кайгородцев Даниил Сергеевич
+- **Email**: [kaigorodtsev-daniil@yandex.ru](mailto:kaigorodtsev-daniil@yandex.ru)
+- **Telegram**: [@d_kaigorodtsev](https://t.me/d_kaigorodtsev)
+
+---
+
+### 🍊 Мальцев Артем Юрьевич
+- **Email**: [maltsevt@yandex.ru](mailto:maltsevt@yandex.ru)
+- **Telegram**: [@martyur](https://t.me/martyur)
+
