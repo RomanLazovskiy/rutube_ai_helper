@@ -54,7 +54,7 @@ TELEGRAM_BOT_TOKEN=<YOUR_BOT_TOKEN>
 
 ```bash
 # Активипуем виртуальное окружение для проекта
-make activate-env
+make env
 
 # Устанавливаем зависимости с помощью Poetry
 poetry install
