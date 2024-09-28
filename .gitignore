@@ -87,3 +87,5 @@ api/models/*
 *.crt
 secrets/
 *.p12
+
+.ipynb_checkpoints
