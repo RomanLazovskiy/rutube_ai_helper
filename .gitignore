@@ -15,7 +15,6 @@ __pycache__/
 .env.*
 *.venv/
 *.vscode/
-poetry.lock
 Pipfile
 Pipfile.lock
 *.pyo
@@ -89,9 +88,3 @@ api/models/*
 *.crt
 secrets/
 *.p12
-
-# Исключение для README и основных файлов
-!.gitignore
-!.gitattributes
-README.md
-LICENSE
