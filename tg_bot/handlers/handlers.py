@@ -1,6 +1,9 @@
 import aiohttp
+import logging
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ContextTypes
+
+logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [["Start", "Info", "Help"]]
@@ -26,15 +29,18 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(help_message)
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_message = update.message.text.lower()
+    user = update.effective_user
+    user_message = update.message.text
 
-    if user_message == "start":
+    logger.info(f"Вопрос пользователя {user.username} ({user.id}): {user_message}")
+
+    if user_message.lower() == "start":
         await start(update, context)
         return
-    elif user_message == "info":
+    elif user_message.lower() == "info":
         await info(update, context)
         return
-    elif user_message == "help":
+    elif user_message.lower() == "help":
         await help_command(update, context)
         return
 
@@ -47,11 +53,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 if resp.status == 200:
                     response_data = await resp.json()
                     assistant_reply = response_data['answer']
+                    logger.info(f"Ответ бота пользователю {user.username} ({user.id}): {assistant_reply}")
                     await update.message.reply_text(assistant_reply)
                 else:
                     error_message = f"Ошибка при запросе: {await resp.text()}"
                     await update.message.reply_text(error_message)
     except aiohttp.ClientConnectionError:
-        await update.message.reply_text("Ошибка соединения. Сервер недоступен по IP или порту.")
+        error_message = "Ошибка соединения. Сервер недоступен по IP или порту."
+        await update.message.reply_text(error_message)
     except Exception as e:
         await update.message.reply_text(f"Произошла ошибка: {e}")
